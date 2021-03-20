@@ -8,7 +8,7 @@ public enum SortKind {
                 sorted = true;
                 for (int i = 0; i < input.length - 1; i++) {
                     if (input[i] > input[i + 1]) {
-                        swapper.swap(i, i + 1);
+                        swapper.basedOn(i).swap(i + 1);
                         sorted = false;
                     }
                 }
@@ -33,7 +33,7 @@ public enum SortKind {
                 while (input[j] > pivot)
                     j--;
                 if (k <= j) {
-                    swapper.swap(k, j);
+                    swapper.basedOn(k).swap(j);
                     k++;
                     j--;
                 }
@@ -59,7 +59,7 @@ public enum SortKind {
             for (int i = 0; i < input.length - 1; i++) {
                 for (int j = i + 1; j > 0; j--) {
                     if (input[j] < input[j - 1]) {
-                        swapper.swap(j, j - 1);
+                        swapper.basedOn(j).swap(j - 1);
                     }
                 }
             }
@@ -70,16 +70,27 @@ public enum SortKind {
     abstract int[] sort(int[] input);
 
     private interface Swapper {
-        void swap(int index1, int index2);
+        void swap(int begin, int end);
+
+        default BasedSwapper basedOn(int begin) {
+            return end -> swap(begin, end);
+        }
+    }
+
+    private interface BasedSwapper {
+        void swap(int end);
     }
 
     protected Swapper swapperFor(int[] input) {
-        return (index1, index2) -> {
-            int first = input[index1];
-            int second = input[index2];
-            input[index1] = second;
-            input[index2] = first;
+        return (begin, end) -> {
+            int first = input[begin];
+            int second = input[end];
+            input[begin] = second;
+            input[end] = first;
         };
     }
 
+    // last idea - to get all curried functions take only one parameter:
+    // (not completed)
+    // Function<Function<Integer[], Function<Integer, Function<Integer, Integer>>>, Void>
 }
