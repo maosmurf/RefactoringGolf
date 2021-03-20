@@ -25,4 +25,25 @@ public class SorterTests {
 		assertArrayEquals(new int[]{1,2,3}, array );
 	}
 
+
+	@Test
+	void name() {
+		int result = add(1, 2);
+	}
+
+	private int add(int a, int b) {
+		return a+b;
+	}
+
+	private int addOne(int b) {
+		return add(1, b);
+	}
+
+	private int addTwo(int b) {
+		return add(2, b);
+	}
+
+	private java.util.function.Function<Integer, Integer> addOne(int b) {
+		return add(1, b);
+	}
 }
